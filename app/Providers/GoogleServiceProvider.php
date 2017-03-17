@@ -1,0 +1,38 @@
+<?php declare(strict_types=1);
+
+namespace JrdnRc\FplChecker\Laravel\Providers;
+
+use Google_Client;
+use Illuminate\Support\ServiceProvider;
+use Google_Service_Gmail as Gmail;
+use Google_Service_Plus as GPlus;
+
+/**
+ * Class GoogleServiceProvider
+ *
+ * @author jrdn rc <jordan@jcrocker.uk>
+ */
+final class GoogleServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        $this->app->bind(Google_Client::class, function () {
+            $client = new Google_Client;
+            $client->setAuthConfig(json_decode(config('services.google.oauth_token')));
+            $client->setScopes(
+                [
+                    Gmail::GMAIL_READONLY,
+                    GPlus::USERINFO_EMAIL,
+                    GPlus::USERINFO_PROFILE,
+                    GPlus::PLUS_ME,
+                ]
+            );
+
+            $client->setRedirectUri(route(''));
+            $client->setAccessType('offline');
+            $client->setApprovalPrompt('force');
+
+            return $client;
+        });
+    }
+}
