@@ -6,6 +6,8 @@ use Google_Client;
 use Illuminate\Support\ServiceProvider;
 use Google_Service_Gmail as Gmail;
 use Google_Service_Plus as GPlus;
+use Laravel\Socialite\Contracts\Factory;
+use Laravel\Socialite\Contracts\Provider;
 
 /**
  * Class GoogleServiceProvider
@@ -18,7 +20,7 @@ final class GoogleServiceProvider extends ServiceProvider
     {
         $this->app->bind(Google_Client::class, function () {
             $client = new Google_Client;
-            $client->setAuthConfig(json_decode(config('services.google.oauth_token')));
+            $client->setAuthConfig(json_decode(config('services.google.oauth_token'), true));
             $client->setScopes(
                 [
                     Gmail::GMAIL_READONLY,
@@ -28,11 +30,26 @@ final class GoogleServiceProvider extends ServiceProvider
                 ]
             );
 
-            $client->setRedirectUri(route(''));
+            $client->setRedirectUri(route('post_google_register'));
             $client->setAccessType('offline');
             $client->setApprovalPrompt('force');
 
             return $client;
+        });
+
+        $this->app->bind(Provider::class, function () {
+            return $this
+                ->app
+                ->make(Factory::class)
+                ->driver('google')
+                ->scopes(
+                    [
+                        Gmail::GMAIL_READONLY,
+                        GPlus::USERINFO_EMAIL,
+                        GPlus::USERINFO_PROFILE,
+                        GPlus::PLUS_ME,
+                    ]
+                );
         });
     }
 }
