@@ -31,6 +31,10 @@ return [
         'redirect'      => env('GOOGLE_REDIRECT_ROUTE'),
     ],
 
+    'native_google' => [
+        'oauth' => env('GMAIL_OAUTH_TOKEN')
+    ],
+
     'stripe' => [
         'model' => JrdnRc\FplChecker\Laravel\User::class,
         'key' => env('STRIPE_KEY'),

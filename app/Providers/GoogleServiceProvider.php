@@ -16,11 +16,14 @@ use Laravel\Socialite\Contracts\Provider;
  */
 final class GoogleServiceProvider extends ServiceProvider
 {
-    public function register()
+    /**
+     * @return void
+     */
+    public function register() : void
     {
         $this->app->bind(Google_Client::class, function () {
             $client = new Google_Client;
-            $client->setAuthConfig(json_decode(config('services.google.oauth_token'), true));
+            $client->setAuthConfig(json_decode(config('services.native_google.oauth'), true));
             $client->setScopes(
                 [
                     Gmail::GMAIL_READONLY,
