@@ -45,6 +45,8 @@ final class GoogleServiceProvider extends ServiceProvider
                 ->app
                 ->make(Factory::class)
                 ->driver('google')
+                ->with(['access_type' => 'offline'])
+                ->stateless()
                 ->scopes(
                     [
                         Gmail::GMAIL_READONLY,
