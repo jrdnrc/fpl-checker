@@ -30,12 +30,13 @@ $this->post('logout', Controllers\Auth\LoginController::class . '@logout')->name
 
 $router->get('/home', Controllers\HomeController::class);
 
+// Registration Routes...
 $router->group(
     [
         'prefix' => 'oauth',
     ],
     function (Router $router) {
-        $router->get('register', Controllers\RegisterViaGoogle::class)->name('google_register');
-        $router->post('register', Controllers\CompleteGoogleRegistration::class)->name('post_google_register');
+        $router->get('register', Controllers\OAuth\RegisterViaGoogle::class)->name('register');
+        $router->get('register/complete', Controllers\OAuth\CompleteGoogleRegistration::class)->name('post_register');
     }
 );

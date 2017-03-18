@@ -15,7 +15,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'token',
+        'refresh_token',
+        'avatar',
+        'google_id',
     ];
 
     /**
@@ -24,6 +30,22 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'remember_token',
     ];
+
+    /**
+     * @param \Laravel\Socialite\Two\User $user
+     * @return User
+     */
+    public static function fromGoogleUser(\Laravel\Socialite\Two\User $user) : self
+    {
+        return static::create([
+            'name'          =>  $user->name,
+            'email'         =>  $user->email,
+            'token'         =>  $user->token,
+            'refresh_token' =>  $user->refreshToken,
+            'avatar'        =>  $user->avatar,
+            'google_id'     =>  $user->id,
+        ]);
+    }
 }
