@@ -9,6 +9,10 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public $casts = [
+        'token' => 'json',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,7 +23,6 @@ class User extends Authenticatable
         'email',
         'password',
         'token',
-        'refresh_token',
         'avatar',
         'google_id',
     ];
@@ -42,8 +45,14 @@ class User extends Authenticatable
         return static::create([
             'name'          =>  $user->name,
             'email'         =>  $user->email,
-            'token'         =>  $user->token,
+            'token'         =>  [
+                'access_token'  => $user->token,
+                'refresh_token' => $user->refreshToken,
+                'expires_in'    => $user->expiresIn,
+                'authorization' => 'Bearer',
+            ],
             'refresh_token' =>  $user->refreshToken,
+            'expires_in'    =>  $user->expiresIn,
             'avatar'        =>  $user->avatar,
             'google_id'     =>  $user->id,
         ]);
