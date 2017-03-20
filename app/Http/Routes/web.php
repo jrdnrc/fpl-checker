@@ -36,7 +36,7 @@ $router->group(
         'prefix' => 'oauth',
     ],
     function (Router $router) {
-        $router->get('register', Controllers\OAuth\RegisterViaGoogle::class)->name('register');
-        $router->get('register/complete', Controllers\OAuth\CompleteGoogleRegistration::class)->name('post_register');
+        $router->get('register', Controllers\OAuth\AuthenticateViaGoogle::class)->name('register');
+        $router->get('register/complete', Controllers\OAuth\CompleteGoogleSignIn::class)->name('post_register');
     }
 );

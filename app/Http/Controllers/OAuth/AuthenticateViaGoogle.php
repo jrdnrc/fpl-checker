@@ -6,13 +6,13 @@ use JrdnRc\FplChecker\Laravel\Http\Controllers\Controller;
 use Laravel\Socialite\Contracts\Provider;
 use Symfony\Component\HttpFoundation\Response;
 
-final class RegisterViaGoogle extends Controller
+final class AuthenticateViaGoogle extends Controller
 {
     /** @var Provider */
     private $provider;
 
     /**
-     * RegisterViaGoogle constructor.
+     * AuthenticateViaGoogle constructor.
      *
      * @param Provider $provider
      */

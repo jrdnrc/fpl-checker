@@ -10,7 +10,7 @@ use JrdnRc\FplChecker\Laravel\User;
 use Laravel\Socialite\Contracts\Provider;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CompleteGoogleRegistration extends Controller
+final class CompleteGoogleSignIn extends Controller
 {
     /** @var Provider */
     private $provider;
@@ -18,7 +18,7 @@ final class CompleteGoogleRegistration extends Controller
     private $auth;
 
     /**
-     * CompleteGoogleRegistration constructor.
+     * CompleteGoogleSignIn constructor.
      *
      * @param Provider $provider
      * @param Guard    $auth
@@ -49,12 +49,13 @@ final class CompleteGoogleRegistration extends Controller
      */
     private function authenticateUser()
     {
+        /** @var \Laravel\Socialite\Two\User $user */
         $user = $this->provider->user();
 
-        if (null === $user = User::where('google_id', $user->getId())->first()) {
-            $user = User::fromGoogleUser($this->provider->user());
+        if (null === $systemUser = User::where('google_id', $user->getId())->first()) {
+            $systemUser = User::fromGoogleUser($user);
         }
 
-        $this->auth->login($user, true);
+        $this->auth->login($systemUser, true);
     }
 }
