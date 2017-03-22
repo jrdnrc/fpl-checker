@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace JrdnRc\FplChecker\Tests;
 
 use Illuminate\Contracts\Console\Kernel;
 
