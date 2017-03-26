@@ -56,6 +56,17 @@ final class CompleteGoogleSignIn extends Controller
             $systemUser = User::fromGoogleUser($user);
         }
 
+        $token = [
+            'access_token'  => $user->token,
+            'refresh_token' => $user->refreshToken,
+            'expires_in'    => $user->expiresIn,
+            'authorization' => 'Bearer',
+        ];
+
+        if (!$systemUser->tokenMatches($token)) {
+            $systemUser->saveNewToken($token);
+        }
+
         $this->auth->login($systemUser, true);
     }
 }

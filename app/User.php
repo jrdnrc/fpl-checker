@@ -57,4 +57,31 @@ class User extends Authenticatable
             'google_id'     =>  $user->id,
         ]);
     }
+
+    /**
+     * @param array $token
+     * @return bool
+     */
+    public function tokenMatches(array $token) : bool
+    {
+        return $this->token() === $token;
+    }
+
+    /**
+     * @param array $token
+     * @return void
+     */
+    public function saveNewToken(array $token) : void
+    {
+        $this->token = $token;
+        $this->save();
+    }
+
+    /**
+     * @return array
+     */
+    public function token() : array
+    {
+        return $this->token;
+    }
 }
