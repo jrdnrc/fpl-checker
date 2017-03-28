@@ -32,7 +32,7 @@ return [
     ],
 
     'native_google' => [
-        'oauth' => env('GMAIL_OAUTH_TOKEN')
+        'oauth' => json_decode(base64_decode(env('GMAIL_OAUTH_TOKEN')), true)
     ],
 
     'stripe' => [
