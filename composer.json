@@ -10,10 +10,12 @@
         "barryvdh/laravel-debugbar": "^2.3",
         "fideloper/proxy": "^3.1",
         "google/apiclient": "^2.0",
+        "laravel/dusk": "^1.0",
         "laravel/framework": "5.4.*",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
-        "php-mime-mail-parser/php-mime-mail-parser": "^2.8"
+        "php-mime-mail-parser/php-mime-mail-parser": "^2.8",
+        "thiagoalessio/tesseract_ocr": "^0.2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
