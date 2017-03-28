@@ -5,6 +5,7 @@ namespace JrdnRc\FplChecker\Tests\Infrastructure\Google\Gmail;
 use Google_Client;
 use Google_Service_Gmail as Gmail;
 use Illuminate\Contracts\Auth\Guard;
+use JrdnRc\FplChecker\Laravel\Infrastructure\Decoding\Decoder;
 use JrdnRc\FplChecker\Laravel\Infrastructure\Google\Gmail\GmailClient;
 use JrdnRc\FplChecker\Tests\TestCase;
 use JrdnRc\FplChecker\Tests\Util\CreatesGmailMessages;
@@ -34,9 +35,7 @@ final class GmailClientTest extends TestCase
         $auth = $this->getMockBuilder(Guard::class)->getMock();
         $auth->expects($this->exactly(2))->method('user')->willReturn(new User);
 
-
-
-        $sut = new GmailClient($api, $auth);
+        $sut = new GmailClient($api, $auth, app(Decoder::class));
         $sut->findReminderUrl();
     }
 }

@@ -7,6 +7,7 @@ use Google_Service_Gmail as Gmail;
 use Google_Service_Gmail_ListMessagesResponse as MessagesResponse;
 use Google_Service_Gmail_Message as Message;
 use Illuminate\Contracts\Auth\Guard;
+use JrdnRc\FplChecker\Laravel\Infrastructure\Decoding\Decoder;
 use PhpMimeMailParser\Parser;
 
 /**
@@ -20,17 +21,21 @@ final class GmailClient
     private $api;
     /** @var Guard */
     private $auth;
+    /** @var Decoder */
+    private $decoder;
 
     /**
      * GmailClient constructor.
      *
-     * @param Gmail $api
-     * @param Guard $auth
+     * @param Gmail   $api
+     * @param Guard   $auth
+     * @param Decoder $decoder
      */
-    public function __construct(Gmail $api, Guard $auth)
+    public function __construct(Gmail $api, Guard $auth, Decoder $decoder)
     {
         $this->api = $api;
         $this->auth = $auth;
+        $this->decoder = $decoder;
     }
 
     /**
@@ -44,16 +49,7 @@ final class GmailClient
 
         $raw = $this->getRawMessageData($message->getId());
 
-        $messageBody = $this->decodeMessageBody($raw);
-
-        $pattern = '/http:\/\/mailer.freepostcodelottery.com\/click.php\/.+\/.+\/\?reminder=[a-zA-Z0-9\-]+/';
-        $matches = [];
-
-        if (1 === preg_match($pattern, $messageBody, $matches)) {
-            return array_shift($matches);     // Full URL
-        }
-
-        throw new Exception('No url could be found.');
+        return $this->decoder->decode($raw);
     }
 
     /**
@@ -84,18 +80,5 @@ final class GmailClient
         );
 
         return $message->raw;
-    }
-
-    /**
-     * @param string $raw
-     * @return string
-     */
-    private function decodeMessageBody(string $raw)
-    {
-        $decoded = base64_decode(str_replace(['-', '_'], ['+', '/'], $raw));    // GMail data is base64url-encoded
-
-        return (new Parser)
-            ->setText($decoded)
-            ->getMessageBody('html');
     }
 }
